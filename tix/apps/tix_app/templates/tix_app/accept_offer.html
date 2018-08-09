@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Accept</title>
+     {% load static %}
+    <link rel='stylesheet' href='{% static "tix_app/css/bootstrap.css" %}'>
+</head>
+<body >
+    <div id='accept_offer_wrapper' >
+        <nav id='general_nav' class="navbar navbar-light bg-light">
+            <h2>TiXchange</h2>
+            <div class="btn-group" role="group">
+                <a id='general_nav_link1' class='btn btn-info btn-small' role='button' href='/main_tix_page '>Main</a>
+                </li>
+                <a id='general_nav_link1' class='btn btn-info btn-small' role='button' href='/user_profile/{{users.id}} '>{{ users.username}}'s Ticket Offers</a>
+                </li>
+            </div>
+        </nav>
+        <div id="accept_mid">
+            <h1>Offer Details</h1>
+            <h5>Please confirm TiX details before proceeding</h5>
+            <table class='table' >
+
+
+                <tr>
+                    <td>Buyer Username</td>
+                    <td>Event</td>
+                    <td>Location</td>
+                    <td>Date</td>
+                    <td>Buyer's Offer</td>
+                </tr>
+                {% for ticket in tickets %}
+                <tr>
+                    {% for offer in offers %}
+                    <td>{{ offer.user.username }}</td>
+                    {% endfor %}
+                    <td>{{ ticket.event.event_name }}</td>
+                    <td>{{ ticket.event_location }}</td>
+                    <td>{{ ticket.event.event_date }}</td>
+                    {% endfor %}
+                    {% for offer in offers %}
+                    <td>{{ offer.offer_price }}</td>
+                    {% endfor %}
+                </tr>
+            
+            </table>
+        <form action='/accept_offer_proccess' method='post'>
+             {% csrf_token %}
+            {% for offer in offers %}
+            <small>By clicking on the button below you accept to the terms offered by {{ offer.user.username }}.</small>
+            {% endfor %}
+            {% for ticket in tickets %}
+            <input type='hidden' name='offer_accept' value='{{ticket.id}}'>
+            {% endfor %}
+            <button type='submit' value='submit' class='btn btn-primary'>Confirm</button>
+        </form>
+        </div>
+    </div>
+</body>
+</html>

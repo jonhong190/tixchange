@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    {% load static %}
+    <link rel='stylesheet' href='{% static "tix_app/css/bootstrap.css" %}'>
+</head>
+<body>
+    <div id='index_wrapper'>
+        <nav id='index_nav' class="navbar navbar-light bg-light">
+            <ul id="row">
+                <li class="col-sm">
+                    <h1 id='index_head'>TiXchange</h1>
+                </li>
+                <li class="col-sm">
+                <form id='index_form' action='/login/' method='post'>
+                    {% csrf_token %}
+                    <label for='email'><strong>Login:</strong></label>
+                    <input id='index_login' type='text' name='email' placeholder='email'>
+                    <input id='index_pw' type='password' name='password' placeholder='password'>
+                    <button type='submit' value='submit' class='btn btn-primary'>Submit</button>
+                </form>
+                </li>
+            </ul>
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}" {% endif %} id='logged_in_text'>
+                    {{ message }}
+                   <a href='/main_tix_page'>Continue to TiX</a>
+                    </li>
+                    {% endfor %}
+            </ul>
+            {% endif %}
+        </nav>   
+        <div id="index_mid">
+            <div id='middle_wrapper'>
+                <h3 style="padding-left:10px;">How It Works</h3>
+                <ul>
+                    <li class='head_list'>Post Your TiX:<br>Add your ticket to our database<br> More validation equals more visibility!</li>
+                    <li class='head_list'>Offers:<br>Don't like a posted price?<br> Make an offer to the seller!</li>
+                    <li id='admin_verify_text' class='head_list'>Admin Verification:<br>Once a ticket price has been agreed upon between buyer and seller,<br>all funds and tickets are held by our team until the TiX has been verified,<br>then funds and TiX are released!</li>
+                </ul>
+                <div id='image_container'>
+                    <img class='img-fluid'src='{% static "tix_app/img/ex_main_page.png" %}' alt='Responsive image'>
+                </div>
+
+            </div>
+            <div id='register_footer'>
+                <a href='new_register/' class='btn btn-info btn-lg btn-block active' role='button' aria-pressed='true'><p id='register_link_text'>Register</p></a> 
+            </div>
+        </div>
+    </div>
+</body>
+</html>

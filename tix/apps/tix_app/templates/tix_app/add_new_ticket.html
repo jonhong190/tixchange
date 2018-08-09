@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Add New Tix</title>
+     {% load static %}
+    <link rel='stylesheet' type="text/css" media="screen" href='{% static "tix_app/css/bootstrap.css" %}'>
+</head>
+<body>
+    <div id='add_tix_wrapper' class='hero-unit'>
+      
+        <nav id='general_nav' class="navbar navbar-light bg-light">
+            <h2>TiXchange</h2>
+            <div class="btn-group" role="group">
+            <a id='general_nav_link1' class='btn btn-info' role='button' href='/main_tix_page '>Main</a>
+                </li>
+                <a id='general_nav_link1' class='btn btn-info' role='button' href='/user_profile/{{users.id}} '>{{ users.username}}'s Ticket Offers</a>
+                </li>
+            </div>
+            </nav>
+        <div id="add_ticket_mid">
+            <div id='add_ticket_form_container'>
+                <h2>Add New TiX</h2>
+
+                <form action='/add_ticket_process/' method='post' enctype='multipart/form-data'>
+                    <div class='form-group'>
+                        {% csrf_token %}
+                        <label for='event_name'>Event Name</label>
+                        <input type='text' class='form-control' name='event_name'>
+                        <label for='street'>Location</label>
+                        <input type='text' class='form-control' placeholder='Venue' name='venue'>
+                        <input type='text' class='form-control' placeholder='City' name='city'>
+                        <select id='state_select'  placeholder='State' name='state'>
+                            {% for state in all_states %}
+                            <option value='{{ state }}'>{{ state }}</option>
+                            {% endfor %}
+                        </select>
+                        <input id='zip_code' type='text' class='form-control' placeholder='Zip-Code (Ex.11111)' name='zip_code'>
+                        <br>
+                        <label for='event_date'>Event Date</label>
+                        <input id='event_date' type='date' class='form-control' name='event_date'>
+                        <input id='face_value_format' type='text' class='form-control' placeholder='Face Value Price' name='face_value'>
+                        <div id='price_small_format'>
+                            <input type='text' class='form-control' placeholder='Your Price' name='price'>
+                            <small id='price_small'>No more than 15% upcharge allowed</small>
+                        </div>
+                        <label for='upload_ticket_pic'>Upload Picture of Ticket</label>
+                        <input  type='file' class='form-control-file' name='upload_ticket_pic'>
+                        <label for='upload_ticket_receipt'>Uplaod Picture of Ticket Receipt</label>
+                        <input type='file' class='form-control-file' name='upload_ticket_receipt'>
+                        <br>
+                        <button type='submit' class='btn btn-primary' value='submit'>Submit</button>
+                        {% if messages %}
+                        <ul class="messages">
+                            {% for message in messages %}
+                            <li{% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}
+                                <a href='/main_tix_page'>Return to Main</a>
+                                </li>
+                                {% endfor %}
+                        </ul>
+                        {% endif %}
+                    </div>
+                </form>
+            </div>
+            </div>
+    
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+     {% load static %}
+    <link rel='stylesheet' href='{% static "tix_app/css/bootstrap.css" %}'>
+    <link rel='stylesheet' href='{% static "tix_app/css/bootstrap-responsive.css" %}'>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+    <script src='{% static "tix_app/js/bootstrap.min.js" %}' type='text/javascript'></script>
+
+</head>
+<body>
+    <div id='my_profile_wrapper' >
+        <nav id='general_nav' class="navbar navbar-light bg-light" >
+            <h2>TiXchange</h2>
+            <div class="btn-group" role="group">
+            <a id='general_nav_link1' class='btn btn-info' role='button' href='/main_tix_page '>Main</a>
+            <a id='general_nav_link1' class='btn btn-info' role='button' href='/logout'>Logout</a>
+            </div>
+        
+        </nav>
+        <div id="my_profile_mid">
+            <div class="row" style="text-align:center; position:relative;">
+               
+            </div>
+            <div id='my_profile_table_container'>
+                <h2>{{ user.username }}'s TiX</h2>
+                <table class='table' >
+                <tr style="font-size:24px">
+                    <td >Event</td>
+                    <td>Date</td>
+                    <td>Face Value</td>
+                    <td>Price</td>
+                    <td>Status</td>
+                    <td>Score</td>
+                    <td>Actions</td>
+                </tr>
+                {% for ticket in tickets %}
+                <tr>
+                    <td>{{ ticket.event.event_name }}</td>
+                    <td>{{ ticket.event.event_date }}</td>
+                    <td>{{ ticket.face_value }}</td>
+                    <td>{{ ticket.price }}</td>
+                    <td>{{ ticket.get_sale_status_display }} </td>
+                    <td>{{ ticket.get_sell_score_display }}</td>
+                    <td>
+                        <a href='/edit/{{ ticket.id }}'>View/Edit TiX</a> |
+                        <a href='/delete_ticket/{{ ticket.id }}'>Delete TiX</a>
+                    </td>
+                </tr>
+            
+                {% if ticket.ticket_offers %} {% for offer in ticket.ticket_offers.all %}
+            
+                <tr>
+                    <td style="border-top:none">
+                        <div class="accordion" id="accordionExample">
+                            <div class="card">
+                                <div class="card-header" id="headingOne">
+                                    <h5 class="mb-0">
+                                        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#{{offer.id}}{{ forloop.counter0 }}" aria-expanded="true"
+                                            aria-controls="{{offer.id}}{{forloop.counter0}}">
+                                            Message from {{ offer.user.username }}
+                                        </button>
+                                    </h5>
+                                </div>
+                            </div>
+                    <!-- </td>
+                    <td style="border-top:none"> -->
+                        <div id="{{offer.id}}{{ forloop.counter0 }}" class="collapse show" aria-labelledby="headingOne">
+                            <div class="card-body">
+                                {{offer.offer_content}} ${{ offer.offer_price }}
+                                <br>
+                                <div class="btn-group" role="group">
+                                    <a role='button' class='btn btn-info btn-small' href='/accept_offer/{{ offer.id }}'>Accept {{ offer.user.username }}'s Offer</a> |
+                                    <a role='button' class='btn btn-info btn-small' href='/remove_offer/{{ offer.id }}'>Decline Offer</a>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    </div>
+                </tr>
+            
+                {% endfor %} {% endif %} {% endfor %}
+            
+            
+            </table>
+            <h3>TiX Offers</h3>
+            <table class='table'>
+                <tr>
+                    <td>Seller</td>
+                    <td>Event</td>
+                    <td>Date</td>
+                    <td>Location</td>
+                    <td>Face Value</td>
+                    <td>Your Offer</td>
+                    <td>Sale Status</td>
+                    <td>Actions</td>
+                </tr>
+            
+                {% for offer in user.user_offers.all %}
+                <tr>
+            
+                    <td>{{ offer.ticket.user.username }}</td>
+                    <td>{{ offer.ticket.event.event_name }}</td>
+                    <td>{{ offer.ticket.event.event_date }}</td>
+                    <td>{{ offer.ticket.event_location.venue_name }}</td>
+                    <td>{{ offer.ticket.price }}</td>
+                    <td>${{ offer.offer_price }}</td>
+                    <td>{{ offer.ticket.get_sale_status_display }}</td>
+                    <td>
+                        <a href='/buy/{{ offer.ticket.id }}'>Buy</a> |
+                        <a href='/remove_offer/{{ offer.id }}'>Remove Offer</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            
+            </table>
+        </div>
+    </div>
+        <!-- </div> -->
+    </div>
+    
+</body>
+</html>

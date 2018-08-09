@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Offer</title>
+     {% load static %}
+    <link rel='stylesheet' href='{% static "tix_app/css/bootstrap.css" %}'>
+</head>
+<body>
+    <div id='offer_wrapper'>
+        <nav id='general_nav' class="navbar navbar-light bg-light">
+            <h2>TiX</h2>
+            <div class="btn-group" role="group">
+                <a id='general_nav_link1' class='btn btn-info' role='button' href='/main_tix_page '>Main</a>
+            
+                <a id='general_nav_link1' class='btn btn-info' role='button' href='/user_profile/{{user.id}} '>{{ user.username}}'s Ticket Offers</a>
+            </div>
+        </nav>
+       
+       <div id="offer_table_mid">
+            <div id='offer_table_container'>
+                <h3>Ticket Information</h3>
+                <p>Don't like the price? Make an offer!</p>
+                    <table id='offer_table' class='table'>
+                        <tr>
+                            <td>Seller</td>
+                            <td>Event</td>
+                            <td>Date</td>
+                            <td>Location</td>
+                            <td>Face Value</td>
+                            <td>Seller Price</td>
+                        </tr>
+                        {% for ticket in tickets %}
+                        <tr>
+                            <td>{{ ticket.user.username }}</td>
+                            <td>{{ ticket.event.event_name }}</td>
+                            <td>{{ ticket.event.event_date }}</td>
+                            <td>{{ ticket.event_location.venue_name }}</td>
+                            <td>{{ ticket.face_value }}</td>
+                            <td>{{ ticket.price }}</td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                    <div id='message'>
+                        <form action='/send_offer/' method='post'>
+                            {% csrf_token %}
+                            <textarea id='user_offer_msg' name='user_offer_message' placeholder='Leave a Message for the seller'></textarea>
+                            <br>
+                            <input type='text' name='offer_price' class='form-control' placeholder='Leave Your Price'> {% for ticket in tickets %}
+                            <input type='hidden' name='hidden' value='{{ticket.id}}'>
+                            <br>
+                            <small>You are making an offer to {{ ticket.user.username }}! If accepted you have 12 hours to submit payment or the TiX
+                                will be set back to available.</small>
+                            {% endfor %}
+                            <br>
+                            <button type='submit' value='submit' class='btn btn-small'>Submit</button>
+                        </form>
+                        {% if messages %}
+                        <ul class="messages">
+                            {% for message in messages %}
+                    
+                            <li{% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+                                {% endfor %}
+                        </ul>
+                        {% endif %}
+                    </div>
+            </div>
+        </div>
+       
+    </div>
+    
+</body>
+</html>

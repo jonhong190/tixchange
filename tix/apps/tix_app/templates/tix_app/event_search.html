@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Event Search</title>
+     {% load static %}
+    <link rel='stylesheet' href='{% static "tix_app/css/bootstrap.css" %}'>
+</head>
+<body>
+    <div class="row">
+        <div id='event_list_container'>
+            <table class='table'>    
+                <tr>
+                    <td>Seller</td>
+                    <td>Event</td>
+                    <td>Date</td>
+                    <td>Location</td>               <td>Face Value</td>
+                    <td>Seller Price</td>
+                    <td>Ticket Rating</td>
+                    <td>Ticket Sale Status</td>
+                    <td>Actions</td>
+                </tr>
+                {% for ticket in tickets %}
+                <tr>
+                    <td>
+                        <a href='/your_profile/{{ ticket.user.id }}'>{{ ticket.user.username }}</a>      
+                    </td>
+                    <td>{{ ticket.event.event_name }}</td>
+                    <td>{{ ticket.event.event_date }}</td>
+                    <td>{{ ticket.event_location.venue_name }} {{ ticket.event_location.city }} {{ ticket.event_location.state }} </td>
+                    <td>${{ ticket.face_value }}</td>
+                    <td>${{ ticket.price }}</td>
+                    <td>{{ ticket.get_sell_score_display }}</td>
+                    <td>{{ ticket.get_sale_status_display }} </td>
+                    <td>
+                        <a href='/buy/{{ ticket.id }}'>Buy</a> |
+                        <a href='/offer/{{ ticket.id }}'>Offer</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>    
+        </div>
+    </div>
+</body>
+</html>

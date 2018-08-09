@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Your TiX</title>
+     {% load static %}
+    <link rel='stylesheet' href='{% static "tix_app/css/bootstrap.css" %}'>
+    <link rel='stylesheet' href='{% static "tix_app/css/bootstrap-responsive.css" %}'>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+    <script src='{% static "tix_app/js/bootstrap.min.js" %}' type='text/javascript'></script>
+
+</head>
+<body>
+    <div id='your_profile_wrapper' class='hero-unit'>
+        <nav id='general_nav' class="navbar navbar-light bg-light">
+            <h2>TiXchange</h2>
+            <div class="btn-group" role="group">
+            <a id='general_nav_link1' class='btn btn-info btn-small' role='button' href='/main_tix_page '>Main</a>
+            </li>
+            <a id='general_nav_link1' class='btn btn-info btn-small' role='button' href='/user_profile/{{users.id}} '>{{ users.username}}'s Ticket Offers</a>
+            </li>  
+            </div>
+        </nav>
+        <div id='your_table_container'>
+            <h2>{{ user.username }}'s TiX</h2>
+            <table class='table'>
+                <tr>
+                    <td>Event</td>
+                    <td>Date</td>
+                    <td>Face Value</td>
+                    <td>Price</td>
+                    <td>Sale Score</td>
+                    <td>Status</td>
+                    <td>Action</td>
+                </tr>
+            
+                {% for ticket in tickets %}
+                <tr>
+                    <td>{{ ticket.event.event_name }}</td>
+                    <td>{{ ticket.event.event_date }}</td>
+                    <td>{{ ticket.face_value }}</td>
+                    <td>{{ ticket.price }}</td>
+                    <td>{{ ticket.get_sell_score_display }}</td>
+                    <td>{{ ticket.get_sale_status_display }} </td>
+                    <td>
+                        <a href='/buy/{{ ticket.id }}'>Buy</a> |
+                        <a href='/offer/{{ ticket.id }}'>Offer</a>
+                    </td>
+            
+                    {% endfor %}
+            </table>
+        </div>
+        
+
+    </div>
+</body>
+</html>

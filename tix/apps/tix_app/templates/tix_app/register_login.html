@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Tix Registration</title>
+    {% load static %}
+    <link rel='stylesheet' href='{% static "tix_app/css/bootstrap.css" %}'>
+</head>
+
+<body>
+    <div id='register_wrapper'>
+        <nav id='general_nav' class="navbar navbar-light bg-light">
+            <h2>TiXchange</h2>
+                <div class="btn-group" role="group">
+                    <a id='general_nav_link1' class='btn btn-info' role='button' href='/'>Main</a>
+                </div>
+        </nav>
+    <div id="register_mid">
+        <table id='register'>
+            <tr>
+                <td class="register_table_data" style="padding-left:50px;">
+                <form action='/register/' method='post'>
+                    {% csrf_token %}
+                    <h3>Registration</h3>
+                    <label for='first_name'>First Name:</label>
+                    <input type='text' class='form-control' name='first_name'>
+                    <label for='last_name'>Last Name:</label>
+                    <input type='text' class='form-control' name='last_name'>
+                    <br>
+                    <label for='username'>Username:</label>
+                    <input type='text' class='form-control' name='username'>
+                    <br>
+                    <label for='email'>Email:</label>
+                    <input type='text' class='form-control' name='email'>
+                    <br>
+                    <label for='password'>Password:
+                        <small id="passwordHelpInline" class="text-muted">
+                        Must be at least 8 characters long
+                        </small>
+                    </label>
+                    <input type='password' class='form-control' name='password'>
+                    
+                    <label for='password'>Confirm Password</label>
+                    <input type='password' class='form-control' name='confirm'>
+                    <label for="birthday" class="form-control">Birthday:
+                        <small id="passwordHelpInline" class="text-muted">
+                        Must be at least 18 years old to register
+                        </small>
+                    </label>
+                    
+                    <input type="date" class="form-control" name="birthday">
+                    
+                    <br>
+                    <button type='submit' class='btn btn-primary'>Submit</button>
+                </form>
+            </td>
+             <td class="register_table_data">
+                <div id='login'>
+                    <form action='/login/' method='post'>
+                        {% csrf_token %}
+                        <h3>Login</h3>
+                        <label for='email'>Email:</label>
+                        <input type='text' class='form-control' name='email'>
+                        <label for='login_password'>Password:</label>
+                        <input type='password' class='form-control' name='password'>
+                        <br>
+                        <button type='submit' class='btn btn-primary'>Login</button>
+                    </form>
+                    {% if messages %}
+                    <ul class="messages">
+                        {% for message in messages %}
+                        <li{% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+                            {% endfor %}
+                    </ul>
+                    {% endif %}
+            </td>
+        </tr>
+    </table>
+    </div>
+</div>
+
+
+</body>
+
+</html>

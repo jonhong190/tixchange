@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Tix List</title>
+     {% load static %}
+    <link rel='stylesheet' type="text/css" href='{% static "tix_app/css/bootstrap.css" %}'>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+</head>
+<body id='main_page_background'>
+    <div id='main_page_wrapper'>
+        <nav id='general_nav' class="navbar navbar-light bg-light">
+            <ul id="row">
+                <li class="col-sm" style="padding-right:50px">
+                    <h4 style="color:whitesmoke;">Welcome Back {{ users.username }}</h4>
+                </li>
+                <li class="col-sm">
+                    <h1 style="color:unset; font-size:82px !important; position:relative;right:35px;">TiXchange</h1>
+                </li>
+                <li class="col-sm">
+                    <div class="btn-group" role="group">
+                    <a id='general_nav_link1' class='btn btn-primary btn-small' role='button' href='/user_profile/{{users.id}} '>{{ users.username }}'s Ticket Offers</a>
+                    <a id='general_nav_link2' class='btn btn-primary btn-small' role='button' href='/logout'>Logout</a>
+                    </div>
+                </li>
+               
+            </ul>
+        </nav>
+        <div id="mid">
+
+        <div class="row">
+            <div id='search_container'>
+                <h2>Search TiX</h2>
+                <form action='/main_tix_page/search_events', method='post'>
+                    {% csrf_token %}
+                    <input type='search' class='search-query input-xxlarge' name='searchbar' id='event_search' placeholder='Search Events'>    
+                </form>   
+            </div>
+        </div>
+        <div class="row">  
+            <div id='event_header'>
+                <h3>Recent TiX</h3>
+                <a role="button" class="btn btn-primary" href='/add_ticket'>Post A New Ticket</a>
+            </div>
+        </div>
+
+        <div class="row" style="text-align: center">
+                <div id='event_search_placeholder'></div>
+                <div id='event_list_container'>
+                    <table class='table'>
+                        <tr>
+                            <td>Seller</td>
+                            <td>Event</td>
+                            <td>Date</td>
+                            <td>Location</td>
+                            <td>Face Value</td>
+                            <td>Seller Price</td>
+                            <td>Ticket Rating</td>
+                            <td>Ticket Sale Status</td>
+                            <td>Actions</td>
+                        </tr>
+                    {% for ticket in tickets %}
+                    <tr>
+                        {% if ticket.sale_status < 2 %}
+                        <td><a href='/your_profile/{{ ticket.user.id }}'>{{ ticket.user.username }}</a></td>
+                        <td>{{ ticket.event.event_name }}</td>
+                        <td>{{ ticket.event.event_date }}</td>
+                        <td>{{ ticket.event_location.venue_name }} {{ ticket.event_location.city }} {{ ticket.event_location.state }} </td>
+                        <td>${{ ticket.face_value }}</td>
+                        <td>${{ ticket.price }}</td>
+                        <td>{{ ticket.get_sell_score_display  }}</td>
+                        <td>{{ ticket.get_sale_status_display }}  </td>
+                        {% if ticket.sale_status < 1 %}
+                        <td><a href='/buy/{{ ticket.id }}'>Buy</a> | <a href='/offer/{{ ticket.id }}'>Offer</a></td>
+                        {%endif %}
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                    </table>
+                </div>
+        </div>
+        </div>
+    </div>
+            
+    <script>
+        $('#event_search').keyup(function(){
+            console.log('came here')
+            $.ajax({
+                url: '/main_tix_page/search_events',
+                method: 'post',
+                data: $(this).parent().serialize(),
+                success: function(serverResponse){
+                    if ($('#event_search') == '') {
+                        $('#event_list_container').show(serverResponse)  
+                    }
+                    else{
+                        $('#event_list_container').hide(serverResponse)
+                        
+                        console.log('success', serverResponse)
+                    }
+                    $('#event_search_placeholder').html(serverResponse)
+                }
+            })
+        })
+        
+    </script>
+</body>
+</html>

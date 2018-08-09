@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>View/Edit TiX</title>
+     {% load static %}
+    <link rel='stylesheet' href='{% static "tix_app/css/bootstrap.css" %}'>
+</head>
+<body>
+   
+    <div id='edit_wrapper' >
+        <nav id='general_nav' class="navbar navbar-light bg-light">
+            <h2>TiXchange</h2>
+            <div class="btn-group" role="group">
+            <a id='general_nav_link1' class='btn btn-info' role='button' href='/main_tix_page'>Main</a>
+            <a id='general_nav_link1' class='btn btn-info' role='button' href='/user_profile/{{user.id}} '>{{ user.username}}'s Ticket Offers</a>
+            </div>
+        </nav>
+        <div id="edit_mid">
+            <div id='edit_form_container'>
+            <table>
+                <tr>
+                    <td style="margin-right:50px">
+                        <h2>Edit TiX</h2>
+                        {% for ticket in tickets %}
+                        <p>{{ ticket.event.event_name }} @ {{ ticket.event_location.venue_name }}</p>
+                        <p>Date: {{ ticket.event.event_date }}</p>
+                        <p>Face Value: {{ ticket.face_value }} </p>
+                        <p>Your Current Price: {{ ticket.price }}</p>
+                        <p>Current Score: {{ ticket.get_sell_score_display }}</p>
+                        <p>Add pictures of the ticket and receipt to increase score!</p>
+                        {% for ticket_photo in ticket.ticket_photos.all %} {% if ticket_photo.photo_file %}
+                        <img src='{{ ticket_photo.photo_file.url }}'> {% endif %} {% if ticket_photo.receipt_file %}
+                        <img src='{{ ticket_photo.receipt_file.url }}'> {% endif %} {% endfor %} {% endfor %}
+                    </td>
+                    <td style="padding-left:60px; padding-top:50px;">
+                        <form action='/edit_ticket_process/' method='post' enctype='multipart/form-data'>
+                            <div class='form-group' >
+                                {% csrf_token %}
+                                <label for='price'><strong>Edit Price</strong></label>
+                                <input type='text' class='form-control' placeholder='Your Price' name='price'>
+                                <br>
+                                <small>No more than 15% upcharge allowed</small>
+                                {% for ticket in tickets %}
+                                <input type='hidden' name='edit_hidden' value='{{ ticket.id }}'> {% for ticket_photo in ticket.ticket_photos.all %}
+                                <input type='hidden' name='photo_hidden' value='{{ ticket_photo.id }}'> {% endfor %} {% endfor %}
+                                <label style="padding-top:15px;"><strong>Edit your photos</strong></label>
+                                <label for='upload_ticket_pic'>Upload Picture of Ticket</label>
+                                <input type='file' class='form-control-file' name='upload_ticket_pic'>
+                                <label for='upload_ticket_receipt' ><strong>Uplaod Picture of Ticket Receipt</strong></label>
+                                <input type='file' class='form-control-file' name='upload_ticket_receipt'>
+                                <br>
+                                <button type='submit' class='btn btn-primary' value='submit'>Submit</button>
+                            </div>
+                        </form>
+                    </td>
+                </tr>
+            </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
