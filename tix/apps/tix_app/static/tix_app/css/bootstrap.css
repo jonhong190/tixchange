@@ -6624,3 +6624,9 @@ a.badge:focus {
   width:100%;
   background-color: #AAAAAA;
 }
+.message_container{
+  background-color:white;
+  text-align: center;
+  padding: 5px;
+  border-radius: 9px;
+}

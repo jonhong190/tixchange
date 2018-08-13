@@ -70,8 +70,8 @@
                     <!-- </td>
                     <td style="border-top:none"> -->
                         <div id="{{offer.id}}{{ forloop.counter0 }}" class="collapse show" aria-labelledby="headingOne">
-                            <div class="card-body">
-                                {{offer.offer_content}} ${{ offer.offer_price }}
+                            <div class="message_container">
+                                <p> {{offer.offer_content}} ${{ offer.offer_price }}</p>
                                 <br>
                                 <div class="btn-group" role="group">
                                     <a role='button' class='btn btn-info btn-small' href='/accept_offer/{{ offer.id }}'>Accept {{ offer.user.username }}'s Offer</a> |
